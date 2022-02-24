@@ -52,7 +52,7 @@ def getFilteredLinks(mod_id):
     for mod_id in tqdm(mod_id):
         links = getJarLinks(mod_id)
         for link in links:
-            if (mcversion[0:3] in link) and not ("forge" in link.lower()):
+            if (mcversion[0:4] in link) and not ("forge" in link.lower()):
                 mod_links.append(link)
                 break
     return mod_links
