@@ -1,5 +1,5 @@
 # true-all-of-fabric
-A python script to try and download as many mods using a specificed modloader and mc version. Therefore creating a true all of fabric*
+A python script to try and download as many fabric mods on a mcversion Modrinth. Therefore creating a true all of fabric*
 
 *According to modrinth and whatever this script manages to download lol
 
