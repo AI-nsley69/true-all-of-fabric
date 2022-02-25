@@ -10,3 +10,7 @@ The script is not perfect, and currently will miss a lot of mods. This is defini
 This script is split up into 2 different scripts, so we don't have to rescrape all of the mod links if the download fails etc.
 First run the `get_links.py` script, this will get the links and store them in jars.csv, then run the `download_jars.py` to download the jars. Afterwards, you'll see a `mods` directory populated with different jar files.
 
+If you wish to remove any XML files (created by url encoded issues on Modrinth leading to Access Denied.) you can run the follow bash command:
+```
+rm $(file mods/* | grep XML | cut -f1 -d":")
+```

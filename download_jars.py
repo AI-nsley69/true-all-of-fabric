@@ -33,4 +33,5 @@ checkDir()
 print("Downloading each file..")
 for mod_link in tqdm(mod_links):
     saveFile(mod_link)
+    sleep(0.1)
 print("Done! All jars should now be in mods/")

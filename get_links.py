@@ -32,29 +32,31 @@ def getAllModIds():
     offset = 0
     while offset < total_hits:
         request = sendRequest(limit, offset)
+        if len(request["hits"]) < 1:
+            break
         for mod in request["hits"]:
             project_ids.append(mod["project_id"])
         offset += 100
-    sleep(0.1)
+    sleep(0.2)
     return project_ids
 
 
 def getJarLinks(mod_id):
-    url = "https://modrinth.com/mod/{mod_id}".format(mod_id=mod_id)
+    url = "https://api.modrinth.com/v2/project/{mod_id}/version".format(mod_id=mod_id)
     response = requests.get(url)
-    soup = BeautifulSoup(response.text, "html.parser")
-    links = soup.find_all("a", href=lambda x: x and ".jar" in x)
-    return [link.get("href") for link in links]
+    mod_info = response.json()
+    for links in mod_info:
+        files = links["files"]
+        if len(files) > 0:
+            files = files[0]
+            if mcversion in links["game_versions"]:
+                return files["url"]
 
-
-def getFilteredLinks(mod_id):
+def getLinksList(mods_id):
     mod_links = []
-    for mod_id in tqdm(mod_id):
-        links = getJarLinks(mod_id)
-        for link in links:
-            if (mcversion[0:4] in link) and not ("forge" in link.lower()):
-                mod_links.append(link)
-                break
+    for mod_id in tqdm(mods_id):
+        mod_links.append(getJarLinks(mod_id))
+        sleep(0.1)
     return mod_links
 
 
@@ -68,7 +70,7 @@ print("Getting mod ids...")
 mod_ids = getAllModIds()
 print(f"Got {len(mod_ids)} mod ids!")
 print("Getting jar links...")
-mod_links = getFilteredLinks(mod_ids)
+mod_links = getLinksList(mod_ids)
 print(f"Got {len(mod_links)} mod links!")
 print("Writing links to links.csv")
 writeToFile(mod_links)
