@@ -47,15 +47,16 @@ def getJarLinks(mod_id):
     mod_info = response.json()
     for links in mod_info:
         files = links["files"]
-        if len(files) > 0:
-            files = files[0]
-            if mcversion in links["game_versions"]:
-                return files["url"]
+        for file in files:
+            if (mcversion in links["game_versions"]) and (loader in links["loaders"]):
+                return file["url"]
 
 def getLinksList(mods_id):
     mod_links = []
     for mod_id in tqdm(mods_id):
-        mod_links.append(getJarLinks(mod_id))
+        link = getJarLinks(mod_id)
+        if link:
+            mod_links.append(link)
         sleep(0.1)
     return mod_links
 
